@@ -10,9 +10,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.app {
-  border: 1px solid red;
-}
-</style>
