@@ -2,9 +2,10 @@
   "name": "electron-vue3-webpack-ts",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
     "build": "./node_modules/.bin/webpack --config webpack.config.js"
   },
   "keywords": [],
