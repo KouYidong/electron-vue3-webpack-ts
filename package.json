@@ -6,14 +6,27 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "./node_modules/.bin/webpack --config webpack.config.js"
+    "build": "./node_modules/.bin/webpack --config webpack.config.js",
+    "pack":"electron-builder --dir",
+    "dist":"electron-builder"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "postinstall": "electron-builder install-app-deps",
+  "build": {
+    "files": [
+      "./dist/**/*",
+      "./index.html"
+    ],
+    "directories": {
+      "output": "package"
+    }
+  },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.0.11",
     "electron": "^12.0.5",
+    "electron-builder": "^22.10.5",
     "lodash": "^4.17.21",
     "vue": "^3.0.11",
     "vue-loader": "^16.2.0",
