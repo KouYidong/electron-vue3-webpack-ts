@@ -2,6 +2,7 @@ const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
+  mode: 'development',
   // 打包后的入口文件
   entry: {
     'bundle': ['./index.js'],
@@ -19,10 +20,21 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader'
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules/,
+        options: {
+          appendTsSuffixTo: [/\.vue$/]
+        }
       }
     ]
   },
   plugins: [
     new VueLoaderPlugin()
-  ]
+  ],
+  resolve: {
+    extensions: ['.js', '.vue', '.json', 'ts', 'tsx']
+  }
 }
