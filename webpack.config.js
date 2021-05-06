@@ -5,8 +5,8 @@ module.exports = {
   mode: 'development',
   // 打包后的入口文件
   entry: {
-    'bundle': ['./index.js'],
-    'main': ['./main.js']
+    'bundle': ['./index.ts'],
+    'main': ['./main.ts']
   },
   output: {
     // 打包后的输入文件, name 作为占位符，打包生成的名称由入口文件来决定
