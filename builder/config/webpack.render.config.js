@@ -15,7 +15,7 @@ const renderConfig = {
     path: path.resolve(__dirname, '../../dist'),
     // publicPath: '/',
     /**
-     * 解决 target 设置为 electron-renderer 通过 webpack-dev-server 配置 hot:true 后启动项目页面报错 global is not defined 的问题
+     * 解决: target 设置为 electron-renderer 通过 webpack-dev-server 配置 hot:true 后启动项目页面报错 global is not defined 的问题
      * https://segmentfault.com/q/1010000018724692
      */
     // globalObject: 'this',
