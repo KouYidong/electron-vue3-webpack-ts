@@ -11,16 +11,19 @@ const startDevServer = () => {
 
   // 删除 dist 目录
   del(['./dist'])
+  del(['./package'])
 
   const renderConfig = require('../config/webpack.render.config.js')
   const options = {
-    contentBase: renderConfig.output.path,
+    // contentBase: renderConfig.output.path,
+    // publicPath: renderConfig.output.publicPath,
     hot: true, // 热更新
-    // open: true, // 自动打开浏览器
+    open: true, // 自动打开浏览器
     // hotOnly: true,
+    // host: 'localhost'
   }
 
-  // WebpackDevServer.addDevServerEntrypoints(renderConfig, options);
+  WebpackDevServer.addDevServerEntrypoints(renderConfig, options);
   const compiler = webpack(renderConfig)
 
   new WebpackDevServer(compiler, options).listen(8080, (err) => {

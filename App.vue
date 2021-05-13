@@ -1,5 +1,6 @@
 <template>
   <div class="app">Welcome to Your Vue.js App</div>
+  123123111
   {{ test() }}
 </template>
 
