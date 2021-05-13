@@ -18,12 +18,12 @@ const startDevServer = () => {
     // contentBase: renderConfig.output.path,
     // publicPath: renderConfig.output.publicPath,
     hot: true, // 热更新
-    open: true, // 自动打开浏览器
+    // open: true, // 自动打开浏览器
     // hotOnly: true,
     // host: 'localhost'
   }
 
-  WebpackDevServer.addDevServerEntrypoints(renderConfig, options);
+  // WebpackDevServer.addDevServerEntrypoints(renderConfig, options);
   const compiler = webpack(renderConfig)
 
   new WebpackDevServer(compiler, options).listen(8080, (err) => {
