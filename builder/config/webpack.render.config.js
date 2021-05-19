@@ -10,15 +10,15 @@ const renderConfig = {
   },
   output: {
     // 打包后的输入文件, name 作为占位符，打包生成的名称由入口文件来决定
-    filename: './js/[name].[hash:8].js',
+    filename: './js/[name].js',
     // 打包后代码输入目录
-    path: path.resolve(__dirname, '../../dist'),
-    // publicPath: '/',
+    path: path.resolve(process.cwd(), 'dist'),
+    publicPath: baseConfig.mode === 'development' ? '' : '/',
     /**
      * 解决: target 设置为 electron-renderer 通过 webpack-dev-server 配置 hot:true 后启动项目页面报错 global is not defined 的问题
      * https://segmentfault.com/q/1010000018724692
      */
-    // globalObject: 'this',
+    globalObject: 'this'
   },
   node: {
     global: true

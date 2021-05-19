@@ -6,8 +6,6 @@
 //   return element
 // }
 
-// document.body.appendChild(test())
-
 import { createApp } from 'vue'
 import App from './App.vue'
 
