@@ -6,7 +6,7 @@
 //   return element
 // }
 
-import { createApp } from 'vue'
+import { createApp } from 'Vue'
 import App from './App.vue'
 
 createApp(App).mount('#app')

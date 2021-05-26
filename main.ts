@@ -6,11 +6,12 @@ function createWindow () {
     height: 600,
     webPreferences: {
       // 在渲染进程中可以直接使用 node
-      nodeIntegration: true,
+      nodeIntegration: true
     }
   })
 
-  win.loadFile('index.html')
+  // 这里 load 的地址基于 webpack.main.config.js 中 output 中的 path 和 filename
+  win.loadFile('../index.html')
 }
 
 app.whenReady().then(createWindow)

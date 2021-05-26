@@ -31,7 +31,7 @@ const devServer = () => {
     del(['./dist'])
 
     const renderCompiler = webpack(renderConfig)
-    
+
     const options = {
       contentBase: renderConfig.output.path,
       publicPath: renderConfig.output.publicPath,
@@ -127,13 +127,35 @@ const buildMain = () => {
   })
 
 }
+// 美化输出
+function electronLog(data, color) {
+    let log = '';
+    data.toString().split(/\r?\n/).forEach(line => {
+        log += `\n${line}`;
+    });
+    if (/[0-9A-z]+/.test(log)) {
+        console.log(
+            chalk[color].bold('┏ Electron -------------------') + 
+            log + 
+            chalk[color].bold('┗ ----------------------------')
+        );
+    }
+}
 
 /**
  * 启动 electron
  */
 const startElectron = () => {
-  console.log('开始启动 electron', path.join(renderConfig.output.path, 'js/main.js'))
-  spawn(electron, [path.join(renderConfig.output.path, 'js/main.js')])
+  // 这里启动主进程，所以需要引入的是主进程的配置
+  let electronProcess = spawn(electron, [path.join(mainConfig.output.path, mainConfig.output.filename)])
+  electronProcess.stdout.on('data', data => {
+    // 正常输出为蓝色
+    electronLog(data, 'blue');
+  });
+  electronProcess.stderr.on('data', data => {
+    // 错误信息为红色
+    electronLog(data, 'red');
+  });
 }
 
 const build = () => {

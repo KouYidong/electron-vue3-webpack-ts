@@ -2,6 +2,7 @@ const { merge } = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const baseConfig = require('./webpack.base.config')
+const { DefinePlugin } = require('webpack')
 
 const renderConfig = {
   // 打包后的入口文件
@@ -10,7 +11,7 @@ const renderConfig = {
   },
   output: {
     // 打包后的输入文件, name 作为占位符，打包生成的名称由入口文件来决定
-    filename: './js/[name].js',
+    filename: './js/index.js',
     // 打包后代码输入目录
     path: path.resolve(process.cwd(), 'dist'),
     publicPath: baseConfig.mode === 'development' ? '' : '/',
@@ -23,7 +24,7 @@ const renderConfig = {
   node: {
     global: true
   },
-  // target: 'electron-renderer',
+  target: 'electron-renderer',
   plugins: [
     /**
      * 如果不传入配置则默认在 output.path 目录下生成一个 index.html 文件，并且在 index.html 文件中插入 output.filename 中的 js 文件。
@@ -37,6 +38,15 @@ const renderConfig = {
       hash: true, // 如果为真，则向所有包含的 js 和 CSS 文件附加一个惟一的 webpack 编译散列。这对于更新每次的缓存文件名称非常有用
       cache: true, // 设置 js css 文件的缓存，当文件没有发生变化时， 是否设置使用缓存
       showErrors: true, // 当文件发生错误时， 是否将错误显示在页面
+    }),
+    /**
+     * You are running the esm-bundler build of Vue. 
+     * It is recommended to configure your bundler to explicitly replace feature flag globals with boolean literals to get proper tree-shaking in the final bundle. 
+     * See http://link.vuejs.org/feature-flags for more details.
+     */
+    new DefinePlugin({
+      __VUE_OPTIONS_API__: false,
+      __VUE_PROD_DEVTOOLS__: false,
     })
   ]
 }
