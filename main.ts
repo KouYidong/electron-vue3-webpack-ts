@@ -8,7 +8,9 @@ function createWindow () {
     height: 600,
     webPreferences: {
       // 在渲染进程中可以直接使用 node
-      nodeIntegration: true
+      nodeIntegration: true,
+      // https://www.electronjs.org/docs/tutorial/context-isolation#context-isolation
+      contextIsolation: false
     }
   })
 
