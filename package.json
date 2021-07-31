@@ -4,9 +4,8 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:webpack": "node ./builder/scripts/dev.js",
     "build": "./node_modules/.bin/webpack --config ./builder/webpack.base.config.js",
-    "start": "electron .",
+    "dev": "node ./builder/scripts/dev.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
