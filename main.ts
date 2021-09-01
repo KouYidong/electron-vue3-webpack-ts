@@ -1,8 +1,12 @@
 const path = require('path')
 const url = require('url')
 const { app, BrowserWindow } = require('electron')
+const { uploadService } = require('./src/main/ipc-main.js')
+const windowMap = {
+  mainWindow: null
+}
 
-function createWindow () {
+function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -20,6 +24,8 @@ function createWindow () {
   // 如果路径或者参数中含有中文，需要对路径进行编码处理
   // win.loadURL(encodeURI(filePath))
   win.loadURL('http://localhost:8080/')
+
+  windowMap.mainWindow = win
 }
 
 app.whenReady().then(createWindow)
@@ -34,4 +40,8 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
+})
+
+app.on('ready', () => {
+  uploadService(windowMap)
 })
