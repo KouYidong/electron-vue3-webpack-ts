@@ -25,6 +25,17 @@ const renderConfig = {
     global: true
   },
   target: 'electron-renderer',
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      }
+    ]
+  },
   plugins: [
     /**
      * 如果不传入配置则默认在 output.path 目录下生成一个 index.html 文件，并且在 index.html 文件中插入 output.filename 中的 js 文件。
