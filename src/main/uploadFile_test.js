@@ -1,5 +1,38 @@
 
 /**
+ * 获取本地存储中的 STC sign
+ */
+ export const getLocalSTCSign_local = () => {
+  const STCSign = JSON.parse(localStorage.getItem('STCSign'))
+  const signature = STCSign.signature
+  const utcDate = STCSign.utcDate
+  const protocol = STCSign.protocol
+  const endpoint = STCSign.endpoint
+  const bucket = STCSign.bucket
+  let ret= {
+    signature,
+    utcDate,
+    protocol,
+    endpoint,
+    bucket
+  }
+  return ret;
+}
+
+
+export const getLocalSTCSign = (messageUId) => {
+      let ret= {
+        signature,
+        utcDate,
+        protocol,
+        endpoint,
+        bucket
+      }
+      return ret;
+}
+
+
+/**
  * 创建分片
  * @param file 文件流对象
  */
