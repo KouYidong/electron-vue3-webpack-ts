@@ -4,6 +4,18 @@ import { upload } from './upload'
 
 let golbalWindow
 
+/**
+ * 监听渲染进程向主进程的通信(invoke)
+ * @param {string} eventName ipc 事件名
+ * @param {function} listener 回调事件
+ */
+ const ipcMainHandle = async (eventName, listener) => {
+  ipcMain.handle(eventName, (event, args) => {
+    console.log(`ipcMainHandle 监听到了。。。${args} ${listener}`)
+    return listener(event, args)
+  })
+}
+
 const ipcMainOn = (eventName, listener) => {
   ipcMain.on(eventName, (event, args) => {
     return listener(event, args)
@@ -33,7 +45,7 @@ const openSelectFileDialog = async (event, args) => {
   // if (fileSize > 50) {
   console.log('准备分片上传')
   const uploadRes = await upload(filePath)
-  console.log('uploadRes =>', uploadRes)
+  process.stdout.write('上传完成 uploadRes =>', uploadRes)
   // }
   // // 整体上传
   // else {
