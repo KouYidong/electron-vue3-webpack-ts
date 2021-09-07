@@ -1,5 +1,6 @@
 import fs from 'fs'
-import { parse } from 'url'
+import { parse, whatwg } from 'url'
+import { parseURL } from 'whatwg-url'
 import http from 'http'
 import https from 'https'
 import { sha256 } from 'js-sha256';
@@ -201,6 +202,8 @@ const getFile = (filePath) => {
 // };
 
 
+
+// 这个版本写文件有问题
 export const upload = async (filePath) => {
   // 获取 object，也就是文件对应在 服务器上的路径
   const object = getObject(filePath)
@@ -211,9 +214,48 @@ export const upload = async (filePath) => {
 
   // 获取上传 URL
   const uploadURL = getUploadURL({ ...data, object })
+  process.stdout.write(uploadURL)
 
   // 读取文件
   const fileBuffer = fs.readFileSync(filePath)
+
+  const URLInfo = parseURL(uploadURL)
+  console.log('URL 信息 =>', URLInfo)
+
+  const fileBufferStr = fileBuffer
+  console.log('fileBuffer =>', fileBuffer.byteLength)
+
+  // const options = {
+  //   hostname: URLInfo.host,
+  //   port: URLInfo.port,
+  //   path: URLInfo.path.join('/'),
+  //   method: 'PUT',
+  //   headers: {
+  //     'Content-Length': fileBufferStr.length,
+  //      // S3 需要的请求头
+  //     'x-amz-algorithm': 'AWS4-HMAC-SHA256',
+  //     'x-amz-content-sha256': sha256Str,
+  //     'x-amz-expires': '900', // 和服务端统一
+  //     'x-amz-date': data.utcDate,
+  //     'Authorization': data.signature,
+  //     'Content-type': 'text/plain',
+  //   }
+  // }
+
+  // const req = https.request(options, res => {
+  //   console.log(`状态码: ${res.statusCode}`)
+
+  //   res.on('data', d => {
+  //     process.stdout.write(d)
+  //   })
+  // })
+
+  // req.on('error', error => {
+  //   console.error(error)
+  // })
+
+  // req.write(fileBufferStr)
+  // req.end()
 
   // 上传
   // 发送请求
@@ -224,24 +266,32 @@ export const upload = async (filePath) => {
       'x-amz-algorithm': 'AWS4-HMAC-SHA256',
       'x-amz-content-sha256': sha256Str,
       'x-amz-expires': '900', // 和服务端统一
-      // 接口通用的 header
-      ...header
+      'x-amz-date': data.utcDate,
+      'Authorization': data.signature,
+      'Content-type': 'text/plain',
+      'Content-Length': fileBuffer.byteLength,
     }
   }, res => {
+    console.log(`状态码: ${res.statusCode}`) // 这里打印了
+    console.log('res =>', res.headers)
     res.on('data', chunk => {
-      length += chunk.length;
-      chunks.push(chunk);
+      console.log('data =>', chunk)
+      // process.stdout.write(chunk) // 这里没有打印
     });
     res.on('end', () => {
-      var buffer = new Buffer(length);
-      // delay copy
-      for (var i = 0, pos = 0, size = chunks.length; i < size; i++) {
-        chunks[i].copy(buffer, pos);
-        pos += chunks[i].length;
-      }
-      res.body = buffer;
+      process.stdout.write('上传结束') // 这里没有打印
     })
   })
+
+  req.on('error', (err) => {
+    console.log(err, `请求错误`)
+    reject(err)
+  })
+  req.write(fileBuffer, err => {
+    console.log(`写流失败 =>`, err)
+  })
+  req.end()
+
   // var readstream = fs.createReadStream(fileBuffer);
   // readstream.on('data', function (chunk) {
   //   console.log('write', chunk.length);
@@ -254,7 +304,7 @@ export const upload = async (filePath) => {
   //   console.log(err, `请求错误`)
   //   reject(err)
   // })
-    req.end();
+  // req.end();
 
 
 
@@ -265,28 +315,28 @@ export const upload = async (filePath) => {
   //   host: urlinfo.host,
   //   path: urlinfo.pathname
   // };
-//   var req = http.request(options, (res) => {
-//     var chunks = [], length = 0;
-//     res.on('data', function (chunk) {
-//       // length += chunk.length;
-//       // chunks.push(chunk);
-//     });
-//     res.on('end', function () {
-//       // var buffer = new Buffer(length);
-//       // // delay copy
-//       // for (var i = 0, pos = 0, size = chunks.length; i < size; i++) {
-//       //   chunks[i].copy(buffer, pos);
-//       //   pos += chunks[i].length;
-//       // }
-//       // res.body = buffer;
-//     });
-//   });
-//   var readstream = fs.createReadStream(fileBuffer);
-//   readstream.on('data', function (chunk) {
-//     // console.log('write', chunk.length);
-//     // req.write(chunk);
-//   });
-//   readstream.on('end', function () {
-//     // req.end();
-//   });
+  //   var req = http.request(options, (res) => {
+  //     var chunks = [], length = 0;
+  //     res.on('data', function (chunk) {
+  //       // length += chunk.length;
+  //       // chunks.push(chunk);
+  //     });
+  //     res.on('end', function () {
+  //       // var buffer = new Buffer(length);
+  //       // // delay copy
+  //       // for (var i = 0, pos = 0, size = chunks.length; i < size; i++) {
+  //       //   chunks[i].copy(buffer, pos);
+  //       //   pos += chunks[i].length;
+  //       // }
+  //       // res.body = buffer;
+  //     });
+  //   });
+  //   var readstream = fs.createReadStream(fileBuffer);
+  //   readstream.on('data', function (chunk) {
+  //     // console.log('write', chunk.length);
+  //     // req.write(chunk);
+  //   });
+  //   readstream.on('end', function () {
+  //     // req.end();
+  //   });
 }

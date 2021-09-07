@@ -41,6 +41,7 @@
   "dependencies": {
     "css-loader": "^6.2.0",
     "js-sha256": "^0.9.0",
-    "style-loader": "^3.2.1"
+    "style-loader": "^3.2.1",
+    "whatwg-url": "^9.1.0"
   }
 }
